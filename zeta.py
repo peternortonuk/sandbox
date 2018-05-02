@@ -1,5 +1,6 @@
 import pandas as pd
 from itertools import combinations
+import pprint as pp
 
 site_dict = {
     1: [1, 1, 0, 1],
@@ -9,8 +10,11 @@ site_dict = {
 plants = ['a', 'b', 'c', 'd']
 
 df = pd.DataFrame(site_dict, index=plants)
-print(df)
+pp.pprint(df)
 
+# average number of species per site
+zetas = df.sum(axis=0) / df.count(axis=0)
+pp.pprint(zetas)
 
 zetas = {}
 for plant in plants:
@@ -25,12 +29,12 @@ for plant in plants:
             # because the draws from the dataset are zeros and ones, we can sum directly
             total = sum(comb)
             totals.append(total)
-            print 'plant: ', plant, 'r: ', r, ' comb: ', comb
+            print 'plant: ', plant, 'r: ', str(r), ' comb: ', str(comb)
         print 'plant: ', plant, 'r: ', r, ' totals: ', totals
         zeta = 1.0 * sum(totals) / len(totals)
         print 'zeta: ', zetas[plant]
         zetas[plant][r] = zeta
-print zetas
+pp.pprint(zetas)
 import pdb; pdb.set_trace()
 pass
 
