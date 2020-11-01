@@ -23,7 +23,7 @@ chart_titles = {'pH': 'pH',
                 'N': 'Nitrogen',
                 'C': 'Carbon',
                 'CN': 'Carbon:Nitrogen ratio'}
-chart_config = 2, 2
+chart_config = dict(nrows=2, ncols=2)
 primary_site_keys = ['MSs', 'BW']
 figure_title = 'Fig 6: Variation in upper soil layer across all sites\n' \
                f'(Mountsorrel and Button Wood then other sites ordered by {chart_titles[RANK_MEASURE]})'
@@ -59,7 +59,7 @@ for k in all_site_list:
     site_dict[k] = df[mask]
 
 # create figure and all the subplots
-fig, axs = plt.subplots(figsize=(figure_height * aspect_ratio, figure_height), *chart_config)
+fig, axs = plt.subplots(figsize=(figure_height * aspect_ratio, figure_height), **chart_config)
 
 # create a dictionary of subplots keyed on the column name
 axes_dict = {}
@@ -70,9 +70,11 @@ for i, c in enumerate(chart_columns):
     axes_dict[c].set_xticklabels(site_dict.keys(), rotation=90)
 
 for c in ['pH', 'N']:
+    # clear these labels
     axes_dict[c].set_xticklabels([])
 
 fig.suptitle(figure_title)
 fig.savefig('soil_boxplot')
+
 plt.show()
 pass
