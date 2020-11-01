@@ -1,8 +1,7 @@
 from collections import OrderedDict
 import pandas as pd
 import numpy as np
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 # ====================================================================
 # config
@@ -59,13 +58,13 @@ for k in all_site_list:
     mask = df[SITE] == k
     site_dict[k] = df[mask]
 
-# chart it
-fig = Figure(figsize=(figure_height * aspect_ratio, figure_height))
-FigureCanvas(fig)
+# create figure and all the subplots
+fig, axs = plt.subplots(figsize=(figure_height * aspect_ratio, figure_height), *chart_config)
 
+# create a dictionary of subplots keyed on the column name
 axes_dict = {}
 for i, c in enumerate(chart_columns):
-    axes_dict[c] = fig.add_subplot(*chart_config, i + 1)
+    axes_dict[c] = axs.flatten()[i]
     axes_dict[c].boxplot([df[c].values for df in site_dict.values()])
     axes_dict[c].set_title(chart_titles[c])
     axes_dict[c].set_xticklabels(site_dict.keys(), rotation=90)
@@ -73,7 +72,7 @@ for i, c in enumerate(chart_columns):
 for c in ['pH', 'N']:
     axes_dict[c].set_xticklabels([])
 
-
 fig.suptitle(figure_title)
 fig.savefig('soil_boxplot')
+plt.show()
 pass
